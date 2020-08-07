@@ -5,6 +5,12 @@
  */
 package picturebordermaker;
 
+import java.io.File;
+import static java.lang.System.exit;
+import java.util.Scanner;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author leandroestevez
@@ -16,18 +22,44 @@ public class PictureBorderMaker {
      */
     public static void main(String[] args) {
         
-        Picture pic = new Picture();
+        String path = "";
+                
+        //Create a file chooser
+        final JFileChooser fc = new JFileChooser();
         
-        pic.load("queen-mary.png");
+        //Add a custom file filter and disable the default
+	//(Accept All) file filter.
+        fc.addChoosableFileFilter(new ImageFilter());
+        fc.setAcceptAllFileFilterUsed(false);
         
-        int newWidth = pic.getWidth() - 40;
-        int newHeight = pic.getHeight() - 40;
+        int returnVal = fc.showOpenDialog(null);
         
-        pic.scale(newWidth, newHeight);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            
+            File file = fc.getSelectedFile();
+            
+            path = file.getAbsolutePath();
+            
+            Picture pic = new Picture();
         
-        pic.move(20, 20);
-        
-        pic.border(10);
+            pic.load(path);
+
+            int newWidth = pic.getWidth() - 40;
+            int newHeight = pic.getHeight() - 40;
+
+            pic.scale(newWidth, newHeight);
+
+            pic.move(20, 20);
+
+            pic.border(10);
+            
+        } else {
+            
+            JOptionPane.showMessageDialog(null, "Thank you for using Picture Border Maker");
+            
+            exit(0);
+            
+        }
         
     }
     
